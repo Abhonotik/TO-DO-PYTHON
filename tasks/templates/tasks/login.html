@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'tasks/style.css' %}" />
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+            <p>
+                <label for="id_username">Username:</label><br>
+                <input type="text" name="username" id="id_username" value="{{ username|default:'' }}" required>
+            </p>
+            <p>
+                <label for="id_password">Password:</label><br>
+                <input type="password" name="password" id="id_password" required>
+            </p>
+            <button type="submit">Log In</button>
+        </form>
+
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+
+        <p>Don't have an account? <a href="{% url 'signup' %}">Sign up</a></p>
+    </div>
+</body>
+</html>

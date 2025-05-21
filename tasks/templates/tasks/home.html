@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Welcome to Your To-Do List</title>
+    <link rel="stylesheet" href="{% static 'tasks/style.css' %}" />
+</head>
+<body>
+        <div class="container_home" >
+        <h1 style="text-align: center;">Welcome to Your To-Do List App</h1><hr>
+
+        <p style="text-align: center;">
+            Organize your tasks efficiently and never forget what's important.
+            Our To-Do List app helps you keep track of your daily activities,
+            set priorities, and mark tasks as completed.
+        </p>
+
+        <h2>Features</h2>
+        <ul>
+            <li>Create and manage your personal tasks</li>
+            <li>Set due dates to keep on schedule</li>
+            <li>Mark tasks as completed</li>
+            <li>Prioritize tasks based on importance</li>
+            <li>Secure login and personalized experience</li>
+        </ul>
+
+        {% if user.is_authenticated %}
+            <p>Hello, {{ user.username }}! Go to your <a href="{% url 'todo' %}">To-Do List</a>.</p>
+            <p><a href="{% url 'logout' %}">Logout</a></p>
+        {% else %}
+            <div style="text-align:center">
+                <a href="{% url 'signup' %}" class="btn">Sign Up</a> 
+                <a href="{% url 'login' %}" class="btn">Log In</a>
+            </div>
+            <h4 style="text-align:center"> Start managing your tasks today!</h4>
+
+        {% endif %}
+    </div>
+</body>
+</html>
