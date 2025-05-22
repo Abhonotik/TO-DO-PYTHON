@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Update Task</title>
+    <link rel="stylesheet" href="{% static 'tasks/style.css' %}" />
+</head>
+<body>
+    <div class="container">
+        <h2>Update Task</h2>
+
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="title">Title:</label>
+            <input type="text" name="title" id="title" value="{{ task.title }}" required />
+
+            <label for="description">Description:</label>
+            <textarea name="description" id="description">{{ task.description }}</textarea>
+
+            <label for="due_date">Due Date:</label>
+            <input type="date" name="due_date" id="due_date" value="{{ task.due_date|date:'Y-m-d' }}" />
+
+            <label for="priority">Priority:</label>
+            <select name="priority" id="priority">
+                <option value="1" {% if task.priority == 1 %}selected{% endif %}>High</option>
+                <option value="2" {% if task.priority == 2 %}selected{% endif %}>Medium</option>
+                <option value="3" {% if task.priority == 3 %}selected{% endif %}>Low</option>
+            </select>
+
+            <label>
+                <input type="checkbox" name="completed" {% if task.completed %}checked{% endif %} />
+                Completed
+            </label>
+
+            <br><br>
+            <button type="submit">Update Task</button>
+        </form>
+
+        <p><a href="{% url 'todo' %}">Back to Task List</a></p>
+    </div>
+</body>
+</html>

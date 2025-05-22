@@ -9,49 +9,60 @@
 </head>
 <body>
     <div class="container">
-        <h2>Welcome, {{ request.user.username }}</h2>
+        <h2>Welcome, {{ request.user.username }}</h2><hr>
 
         <h3>Your Tasks</h3>
+        {% if tasks %}
         <ul>
-            {% for task in tasks %}
-                <li>
-                    <strong>{{ task.title }}</strong> - 
-                    {% if task.completed %}Completed{% else %}Incomplete{% endif %}
-                    {% if task.due_date %} | Due: {{ task.due_date }}{% endif %}
-                </li>
-            {% empty %}
-                <li>No tasks yet!</li>
+        {% for task in tasks %}
+            <li> 
+                <strong>{{ task.title }}</strong> - 
+                {% if task.completed %}Completed{% else %}Incomplete{% endif %}
+                {% if task.due_date %} | Due: {{ task.due_date }}{% endif %}
+
+                <!-- Buttons only appear if a task exists -->
+               <div style="text-align: center; margin-top: 10px;">
+  <a href="{% url 'update_task' task.id %}" style="display: inline-block; margin: 0 5px;">
+    <button class="btn btn-primary">Update</button>
+  </a>
+  <a href="{% url 'delete_task' task.id %}" style="display: inline-block; margin: 0 5px;" >
+    <button style="background-color:red" class="btn btn-danger">Delete</button>
+  </a>
+</div>
+            </li>
             {% endfor %}
         </ul>
+        {% else %}
+            <p style="color: gray; font-style: italic; text-align:center;">No tasks yet! Add one below.</p>
+        {% endif %}
 
         <h3>Add a new Task</h3>
         <form method="POST" action="{% url 'todo' %}">
             {% csrf_token %}
             <p>
-                <label for="title">Title:</label><br>
+                <label for="title">Title:</label>
                 <input type="text" name="title" id="title" required>
             </p>
             <p>
-                <label for="description">Description:</label><br>
+                <label for="description">Description:</label>
                 <textarea name="description" id="description"></textarea>
             </p>
+            <label>Priority:</label>
+                <select name="priority">
+                <option value="1">High</option>
+                <option value="2">Medium</option>
+                <option value="3">Low</option>
+                </select>
             <p>
-                <label>
-                    <input type="checkbox" name="completed"> Completed
-                </label>
-            </p>
-            <p>
-                <label for="due_date">Due Date:</label><br>
+                <label for="due_date">Due Date:</label>
                 <input type="date" name="due_date" id="due_date">
             </p>
-            <p>
-                <label for="priority">Priority (0-5):</label><br>
-                <input type="number" name="priority" id="priority" min="0" max="5" value="0">
-            </p>
-            <button type="submit">Add Task</button>
+            <button type="submit" class="btn btn-success">Add Task</button>
+        
         </form>
+<br>
+        <button style="display: block; margin: 5px auto;" onclick="location.href='{% url 'logout' %}'">Logout</button>
 
-        <p><a href="{% url 'logout' %}">Logout</a></p>
     </div>
 </body>
 </html>

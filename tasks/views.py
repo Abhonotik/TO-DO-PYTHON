@@ -12,7 +12,8 @@ def todo_view(request):
         completed = request.POST.get('completed') == 'on'
         due_date = request.POST.get('due_date')
         priority = request.POST.get('priority', 0)
-
+        
+    
         Task.objects.create(
             user=request.user,
             title=title,
@@ -25,6 +26,26 @@ def todo_view(request):
 
     tasks = Task.objects.filter(user=request.user)
     return render(request, 'tasks/todo.html', {'tasks': tasks})
+
+
+def update_task(request, task_id):
+    task = Task.objects.get(id=task_id, user=request.user)
+    if request.method == 'POST':
+        task.title = request.POST.get('title')
+        task.description = request.POST.get('description', '')
+        task.completed = request.POST.get('completed') == 'on'
+        task.due_date = request.POST.get('due_date')
+        task.priority = int(request.POST.get('priority', 0))
+        task.save()
+        return redirect('todo')
+    return render(request, 'tasks/update_task.html', {'task': task})
+
+def delete_task(request, task_id):
+    task = Task.objects.get(id=task_id, user=request.user)
+    if request.method == 'POST':
+        task.delete()
+        return redirect('todo')
+    return render(request, 'tasks/delete_task.html', {'task': task})
 
 
 def signup_view(request):
